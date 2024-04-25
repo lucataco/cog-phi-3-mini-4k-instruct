@@ -84,8 +84,7 @@ class Predictor(BasePredictor):
             seed = torch.randint(0, 100000, (1,)).item()
         torch.random.manual_seed(seed)
         chat_format = MESSAGES.format(sys_prompt=system_prompt, user_prompt=prompt)
-        formatted_prompt = self.tokenizer.decode(self.tokenizer(chat_format)["input_ids"])
-        tokens = self.tokenizer(formatted_prompt, return_tensors="pt")
+        tokens = self.tokenizer(chat_format, return_tensors="pt")
         streamer = TextIteratorStreamer(self.tokenizer, skip_prompt=True, remove_start_token=True)
         input_ids = tokens.input_ids.to(device=self.device)
         max_length = input_ids.shape[1] + max_length
